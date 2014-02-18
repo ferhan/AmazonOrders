@@ -15,5 +15,4 @@ Retrieve order history for a merchant, using Amazon Orders API.
  
  To be able to work around SQL, Microsoft Entity Framework and AWS quirks around minimum datetime values, this program assumes a minimum date of 2000-01-01. If your business needs order history before that date, than you may want to change that value.
  
- 
-
+ The program pauses after every 100 orders are retrieved, and before the next request to AWS, to avoid throttling.
