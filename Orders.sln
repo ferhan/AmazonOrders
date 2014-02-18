@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrdersMonitor", "OrdersMonitor\OrdersMonitor.csproj", "{A2BD0877-9371-4BB9-A10F-48ED72CBACA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MWSRuntime", "MWSRuntime\MWSRuntime.csproj", "{D88255F5-9F58-4CF9-987A-540B75B1EB92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MWSOrdersLibrary", "MWSOrdersLibrary\MWSOrdersLibrary.csproj", "{5CB464ED-F2DA-4A0C-81EA-EAF2AF8B0B0E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2BD0877-9371-4BB9-A10F-48ED72CBACA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2BD0877-9371-4BB9-A10F-48ED72CBACA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2BD0877-9371-4BB9-A10F-48ED72CBACA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2BD0877-9371-4BB9-A10F-48ED72CBACA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D88255F5-9F58-4CF9-987A-540B75B1EB92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D88255F5-9F58-4CF9-987A-540B75B1EB92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D88255F5-9F58-4CF9-987A-540B75B1EB92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D88255F5-9F58-4CF9-987A-540B75B1EB92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CB464ED-F2DA-4A0C-81EA-EAF2AF8B0B0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CB464ED-F2DA-4A0C-81EA-EAF2AF8B0B0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CB464ED-F2DA-4A0C-81EA-EAF2AF8B0B0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CB464ED-F2DA-4A0C-81EA-EAF2AF8B0B0E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
