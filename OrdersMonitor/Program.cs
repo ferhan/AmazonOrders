@@ -18,12 +18,12 @@ namespace OrdersMonitor {
     public class OrdersMonitorApp {
 
         public static DateTime DateTimeBegin = new DateTime(2000, 1, 1);
-        public static string AccessKey;
-        public static string SecretKey;
-        public static string SellerId;
+        public static string AccessKey = "";
+        public static string SecretKey = "";
+        public static string SellerId = "";
         public static MarketplaceIdList MarketplaceId = new MarketplaceIdList
         {
-            Id = new List<string>(new[] { "ATVPDKIKX0DER" })
+            Id = new List<string>(new[] { "ATVPDKIKX0DER"})
         };
         public static void Main(string[] args)
         {
