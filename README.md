@@ -19,6 +19,7 @@ Retrieve order history for a merchant, using Amazon Orders API.
 
  In order to get the app to work, create a file named AWSCredentials.config and add it to the project. Mark the file properties so that it is always copied to the debug/run location. The file format is as follows:
  
+```xml
 <?xml version="1.0" encoding="utf-8" ?>
 
 <AWSCredentials>
@@ -26,6 +27,9 @@ Retrieve order history for a merchant, using Amazon Orders API.
   <add key="SecretKey" value="key goes here" />
   <add key="SellerId" value="key goes here" />
   <add key="MarketPlaceIdList" value="ATVPDKIKX0DER" />
-</AWSCredentials>
+</AWSCredentials>'
+```
+
+If you happen to do a pull request and want to make updates to the project, please do not add or push your AWSCredentials.config file at all. You don't need the world to be able to use your identifiers.
 
 You can add other marketplace id values into the same string, separating with commas from each other ("id1,id2,id3"). The marketplace id included is the default Amazon US marketplace.
