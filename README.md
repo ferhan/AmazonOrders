@@ -16,3 +16,16 @@ Retrieve order history for a merchant, using Amazon Orders API.
  To be able to work around SQL, Microsoft Entity Framework and AWS quirks around minimum datetime values, this program assumes a minimum date of 2000-01-01. If your business needs order history before that date, than you may want to change that value.
  
  The program pauses after every 100 orders are retrieved, and before the next request to AWS, to avoid throttling.
+
+ In order to get the app to work, create a file named AWSCredentials.config and add it to the project. Mark the file properties so that it is always copied to the debug/run location. The file format is as follows:
+ 
+<?xml version="1.0" encoding="utf-8" ?>
+
+<AWSCredentials>
+  <add key="AccessKey" value="key goes here" />
+  <add key="SecretKey" value="key goes here" />
+  <add key="SellerId" value="key goes here" />
+  <add key="MarketPlaceIdList" value="ATVPDKIKX0DER" />
+</AWSCredentials>
+
+You can add other marketplace id values into the same string, separating with commas from each other ("id1,id2,id3"). The marketplace id included is the default Amazon US marketplace.
