@@ -55,13 +55,13 @@ namespace OrdersMonitor {
                 // response = sample.InvokeListOrderItems();
                 // response = sample.InvokeListOrderItemsByNextToken();
 
-                DateTime createdAfterDefault = new DateTime(2010, 1, 1);
-                DateTime createdBeforeDefault = DateTime.Now.AddMinutes(-5);
+                DateTime updatedAfterDefault = new DateTime(2014, 7, 20);
+                DateTime updatedBeforeDefault = DateTime.Now.AddMinutes(-5);
 
                 using (var db = new OrderContext())
                 {
                     // is this the first time ?
-                    var query = from o in db.Orders orderby o.PurchaseDate descending select o;
+                    var query = from o in db.Orders orderby o.LastUpdateDate descending select o;
 
                     if (query.Any())
                     {
@@ -69,22 +69,22 @@ namespace OrdersMonitor {
 
                         // although we are using a nullable type, there is no way that we will get a record that has a 
                         // null PurchaseDate. So we are safe here.
-                        DateTime? tempDate = query.First().PurchaseDate;
-                        DateTime lastPurchase = DateTimeBegin;  // silly assignment so we cover the else case.
+                        DateTime? tempDate = query.First().LastUpdateDate;
+                        DateTime lastUpdate = DateTimeBegin;  // silly assignment so we cover the else case.
                         if (tempDate != null) {
-                            lastPurchase = (DateTime)tempDate;
+                            lastUpdate = (DateTime)tempDate;
                         }
 
-                        Console.WriteLine("Last order date is : " + lastPurchase);
+                        Console.WriteLine("Last update date is : " + lastUpdate);
                         
-                        GetOrdersForTimeWindow(ordersMonitorApp, lastPurchase, createdBeforeDefault);
+                        GetOrdersForTimeWindow(ordersMonitorApp, lastUpdate, updatedBeforeDefault);
                     }
                     else
                     {
                         Console.WriteLine("No results exist. Fresh Database.");
                         
                         // get orders for the time window and save to the database
-                        GetOrdersForTimeWindow(ordersMonitorApp, createdAfterDefault, createdBeforeDefault);
+                        GetOrdersForTimeWindow(ordersMonitorApp, updatedAfterDefault, updatedBeforeDefault);
                     }
 
                 }
@@ -97,8 +97,8 @@ namespace OrdersMonitor {
 
         private static void GetOrdersForTimeWindow(
             OrdersMonitorApp theApp, 
-            DateTime createdAfter, 
-            DateTime createdBefore
+            DateTime updatedAfter, 
+            DateTime updatedBefore
             )
         {
             try
@@ -126,7 +126,7 @@ namespace OrdersMonitor {
                     else
                     {
                         // we are making a request for the first time.
-                        response = theApp.InvokeListOrders(createdAfter, createdBefore);
+                        response = theApp.InvokeListOrders(updatedAfter, updatedBefore);
 
                         listOrdersResponse = (ListOrdersResponse)response;
 
@@ -144,11 +144,25 @@ namespace OrdersMonitor {
 
                         foreach (Order order in ordersFromRequest.Order)
                         {
-                            Console.WriteLine(order.AmazonOrderId + " " + order.PurchaseDate);
+                            Console.WriteLine(order.AmazonOrderId + " " + order.PurchaseDate + " " + order.LastUpdateDate);
                             // is this order already in the database ?
                             var queryDuplicateCheck = from o in db.Orders
                                                       where o.AmazonOrderId == order.AmazonOrderId
                                                       select o;
+
+                            if (order.ShippingAddress != null)
+                            {
+                                if (queryDuplicateCheck.Any())
+                                {
+                                    var dbOrder = queryDuplicateCheck.First();
+                                    db.Orders.Remove(dbOrder);
+                                    db.Orders.Add(order);
+                                }
+                                else
+                                {
+                                    db.Orders.Add(order);
+                                }
+                            }
 
                             if (!queryDuplicateCheck.Any() && order.ShippingAddress != null)
                             {
