@@ -15,6 +15,8 @@
  */
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using MWSClientCsRuntime;
 using MarketplaceWebServiceOrders.Model;
 
@@ -106,9 +108,24 @@ namespace MarketplaceWebServiceOrders
                 request);
         }
 
+        public Task<GetOrderResponse> GetOrderAsync(GetOrderRequest request, CancellationToken cancellationToken = default)
+        {
+            return connection.CallAsync(
+                new MarketplaceWebServiceOrdersClient.Request<GetOrderResponse>("GetOrder", typeof(GetOrderResponse),
+                    servicePath),
+                request, cancellationToken);
+        }
+
         public GetServiceStatusResponse GetServiceStatus(GetServiceStatusRequest request)
         {
             return connection.Call(
+                new MarketplaceWebServiceOrdersClient.Request<GetServiceStatusResponse>("GetServiceStatus", typeof(GetServiceStatusResponse), servicePath),
+                request);
+        }
+        
+        public Task<GetServiceStatusResponse> GetServiceStatusAsync(GetServiceStatusRequest request)
+        {
+            return connection.CallAsync(
                 new MarketplaceWebServiceOrdersClient.Request<GetServiceStatusResponse>("GetServiceStatus", typeof(GetServiceStatusResponse), servicePath),
                 request);
         }
@@ -119,10 +136,24 @@ namespace MarketplaceWebServiceOrders
                 new MarketplaceWebServiceOrdersClient.Request<ListOrderItemsResponse>("ListOrderItems", typeof(ListOrderItemsResponse), servicePath),
                 request);
         }
+        
+        public Task<ListOrderItemsResponse> ListOrderItemsAsync(ListOrderItemsRequest request)
+        {
+            return connection.CallAsync(
+                new MarketplaceWebServiceOrdersClient.Request<ListOrderItemsResponse>("ListOrderItems", typeof(ListOrderItemsResponse), servicePath),
+                request);
+        }
 
         public ListOrderItemsByNextTokenResponse ListOrderItemsByNextToken(ListOrderItemsByNextTokenRequest request)
         {
             return connection.Call(
+                new MarketplaceWebServiceOrdersClient.Request<ListOrderItemsByNextTokenResponse>("ListOrderItemsByNextToken", typeof(ListOrderItemsByNextTokenResponse), servicePath),
+                request);
+        }
+        
+        public Task<ListOrderItemsByNextTokenResponse> ListOrderItemsByNextTokenAsync(ListOrderItemsByNextTokenRequest request)
+        {
+            return connection.CallAsync(
                 new MarketplaceWebServiceOrdersClient.Request<ListOrderItemsByNextTokenResponse>("ListOrderItemsByNextToken", typeof(ListOrderItemsByNextTokenResponse), servicePath),
                 request);
         }
@@ -133,10 +164,24 @@ namespace MarketplaceWebServiceOrders
                 new MarketplaceWebServiceOrdersClient.Request<ListOrdersResponse>("ListOrders", typeof(ListOrdersResponse), servicePath),
                 request);
         }
+        
+        public Task<ListOrdersResponse> ListOrdersAsync(ListOrdersRequest request)
+        {
+            return connection.CallAsync(
+                new MarketplaceWebServiceOrdersClient.Request<ListOrdersResponse>("ListOrders", typeof(ListOrdersResponse), servicePath),
+                request);
+        }
 
         public ListOrdersByNextTokenResponse ListOrdersByNextToken(ListOrdersByNextTokenRequest request)
         {
             return connection.Call(
+                new MarketplaceWebServiceOrdersClient.Request<ListOrdersByNextTokenResponse>("ListOrdersByNextToken", typeof(ListOrdersByNextTokenResponse), servicePath),
+                request);
+        }
+        
+        public Task<ListOrdersByNextTokenResponse> ListOrdersByNextTokenAsync(ListOrdersByNextTokenRequest request)
+        {
+            return connection.CallAsync(
                 new MarketplaceWebServiceOrdersClient.Request<ListOrdersByNextTokenResponse>("ListOrdersByNextToken", typeof(ListOrdersByNextTokenResponse), servicePath),
                 request);
         }

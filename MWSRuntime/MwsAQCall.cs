@@ -19,6 +19,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Collections;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace MWSClientCsRuntime
@@ -121,6 +122,78 @@ namespace MWSClientCsRuntime
                 }
             } while (true);
 
+        }
+
+        public async Task<IMwsReader> invokeAsync(CancellationToken cancellationToken = default)
+        {
+            string responseBody;
+            string message;
+            HttpStatusCode statusCode = default(HttpStatusCode);
+            /* Add required request parameters */
+            AddRequiredParameters();
+            string queryString = GetParametersAsString(parameters);
+            int retries = 0;
+            do
+            {
+                /* Submit the request and read response body */
+                try
+                {
+                    request = connection.GetHttpClient(serviceEndPoint.URI);
+                    byte[] requestData = new UTF8Encoding().GetBytes(queryString);
+                    request.ContentLength = requestData.Length;
+                    using (Stream requestStream = await request.GetRequestStreamAsync())
+                    {
+                        await requestStream.WriteAsync(requestData, 0, requestData.Length, cancellationToken);
+                    }
+                    using (HttpWebResponse httpResponse = (HttpWebResponse)(await request.GetResponseAsync()))
+                    {
+                        statusCode = httpResponse.StatusCode;
+                        message = httpResponse.StatusDescription;
+                        ResponseHeaderMetadata = GetResponseHeaderMetadata(httpResponse);
+                        StreamReader reader = new StreamReader(httpResponse.GetResponseStream(), Encoding.UTF8);
+                        responseBody = await reader.ReadToEndAsync();
+                    }
+                    if (statusCode == HttpStatusCode.OK)
+                    {
+                        return new MwsXmlReader(responseBody);
+                    }
+                    MwsException e = new MwsException((int)statusCode, message, null, null, responseBody, ResponseHeaderMetadata);
+
+                    if (statusCode == HttpStatusCode.InternalServerError)
+                    {
+                        if (PauseIfRetryNeeded(retries++))
+                            continue;
+                    }
+                    throw e;
+                }
+                /* Web exception is thrown on unsuccessful responses */
+                catch (WebException we)
+                {
+                    using (HttpWebResponse httpErrorResponse = (HttpWebResponse)we.Response)
+                    {
+                        if (httpErrorResponse == null)
+                        {
+                            throw new MwsException(we);
+                        }
+                        statusCode = httpErrorResponse.StatusCode;
+                        using (StreamReader reader = new StreamReader(httpErrorResponse.GetResponseStream(), Encoding.UTF8))
+                        {
+                            responseBody = await reader.ReadToEndAsync();
+                        }
+                    }
+                    //retry logic
+                    if (PauseIfRetryNeeded(retries++))
+                        continue;
+                    throw new MwsException((int)statusCode, null, null, null, responseBody, null);
+                }
+
+                /* Catch other exceptions, attempt to convert to formatted exception,
+                 * else rethrow wrapped exception */
+                catch (Exception e)
+                {
+                    throw new MwsException(e);
+                }
+            } while (true);
         }
 
         /// <summary>

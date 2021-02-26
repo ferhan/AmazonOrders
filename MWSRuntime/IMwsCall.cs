@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace MWSClientCsRuntime
 {
@@ -27,7 +28,15 @@ namespace MWSClientCsRuntime
         /// </summary>
         /// <exception cref="MwsException">Exceptions from invoking the request</exception>
         /// <returns></returns>
-        IMwsReader invoke() ;
+        IMwsReader invoke();
+        
+        /// <summary>
+        /// Invoke the request asynchronously.
+        /// <para>Call after writing request body</para>
+        /// </summary>
+        /// <exception cref="MwsException">Exceptions from invoking the request</exception>
+        /// <returns></returns>
+        Task<IMwsReader> invokeAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get the response metadata header.
