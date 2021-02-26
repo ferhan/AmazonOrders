@@ -15,6 +15,8 @@
  */
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using MarketplaceWebServiceOrders.Model;
 
 namespace MarketplaceWebServiceOrders
@@ -35,6 +37,8 @@ namespace MarketplaceWebServiceOrders
         /// This operation takes up to 50 order ids and returns the corresponding orders.
         /// </remarks>
         GetOrderResponse GetOrder(GetOrderRequest request);
+
+        Task<GetOrderResponse> GetOrderAsync(GetOrderRequest request, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get Service Status

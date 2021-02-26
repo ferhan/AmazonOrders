@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MWSClientCsRuntime
 {
@@ -160,6 +162,29 @@ namespace MWSClientCsRuntime
             }
            
         }
+
+        public async Task<T> CallAsync<T>(IMwsRequestType<T> type, IMwsObject requestData, CancellationToken cancellationToken = default) where T : IMwsObject
+        {
+            IMwsReader responseReader = null;
+            try
+            {
+                string servicePath = type.ServicePath;
+                string operationName = type.OperationName;
+                IMwsCall mc = NewCall(servicePath, operationName);
+                requestData.WriteFragmentTo(mc);
+                responseReader = await mc.invokeAsync(cancellationToken);
+                MwsResponseHeaderMetadata rhmd = mc.GetResponseMetadataHeader();
+                T response = MwsUtil.NewInstance<T>();
+                type.SetResponseHeaderMetadata(response, rhmd);
+                response.ReadFragmentFrom(responseReader);
+                return response;
+            }
+            catch (Exception e)
+            {
+                throw type.WrapException(e);
+            }
+        }
+        
         /// <summary>
         /// Clones the connection and resets the state as if it was never used
         /// </summary>
